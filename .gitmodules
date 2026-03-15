@@ -1,0 +1,6 @@
+[submodule "hmcts-dev-test-frontend"]
+	path = hmcts-dev-test-frontend
+	url = https://github.com/Usman-Younas7/hmcts-dev-test-frontend.git
+[submodule "hmcts-dev-test-backend"]
+	path = hmcts-dev-test-backend
+	url = https://github.com/Usman-Younas7/hmcts-dev-test-backend.git
