@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  task-db:
+    image: postgres:16-alpine
+    container_name: task-management-db
+    environment:
+      POSTGRES_USER: hmcts
+      POSTGRES_PASSWORD: hmcts
+      POSTGRES_DB: task_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hmcts -d task_management"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  task-backend:
+    build:
+      context: ./hmcts-dev-test-backend
+      dockerfile: Dockerfile
+    container_name: task-management-backend
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: task-db
+      DB_PORT: 5432
+      DB_NAME: task_management
+      DB_USER_NAME: hmcts
+      DB_PASSWORD: hmcts
+    depends_on:
+      task-db:
+        condition: service_healthy
+
+  task-frontend:
+    build:
+      context: ./hmcts-dev-test-frontend
+      dockerfile: Dockerfile
+    container_name: task-management-frontend
+    ports:
+      - "3100:3100"
+    environment:
+      BACKEND_URL: http://task-backend:4000
+      CSRF_SECRET: ${CSRF_SECRET:-change-me-in-production}
+    depends_on:
+      - task-backend
+
+volumes:
+  pgdata:
