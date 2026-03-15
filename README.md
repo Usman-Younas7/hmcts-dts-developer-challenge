@@ -31,7 +31,7 @@ dts-developer-challenge/
 
 ```bash
 git clone https://github.com/Usman-Younas7/hmcts-dts-developer-challenge.git
-cd dts-developer-challenge
+cd hmcts-dts-developer-challenge
 git submodule update --init --recursive
 ```
 
